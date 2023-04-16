@@ -35,10 +35,29 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
+
+fn transform(s: &str) -> Result<Person, Box<dyn std::error::Error>> {
+    let k: Vec<&str> = s.split(",").collect();
+    if k.len() != 2 || k[0] == "" {
+        return Ok(Person{
+            name: "John".to_string(),
+            age: 30
+        })
+    }
+    let name = k[0];
+    let age = k[1].parse::<usize>()?;
+    Ok(Person {
+        name: name.to_string(), 
+        age
+    })
+}
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        transform(s).unwrap_or(Person{
+            name: "John".to_string(),
+            age: 30
+        })
     }
 }
 
